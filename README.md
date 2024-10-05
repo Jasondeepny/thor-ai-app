@@ -1,6 +1,5 @@
 
 
-thor-ai-app
+# thor-ai-app
 
-AI 相关代码
-===========
+AI 相关代码：
