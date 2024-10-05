@@ -1,10 +1,9 @@
 import json
-import aiohttp
 import certifi
 import ssl
 from typing import List, Dict, AsyncGenerator, Literal
 import asyncio
-from aiohttp import ClientError, ClientTimeout
+from aiohttp import ClientSession,ClientError, ClientTimeout
 
 STATUS_URL = "https://pp.block.pp.ua/duckchat/v1/status";
 CHAT_URL = "https://pp.block.pp.ua/duckchat/v1/chat";
@@ -40,7 +39,7 @@ class Chat:
         }
         for attempt in range(max_retries):
             try:
-                async with aiohttp.ClientSession(
+                async with ClientSession(
                     timeout=ClientTimeout(total=60)
                 ) as session:
                     async with session.post(
@@ -101,7 +100,7 @@ class Chat:
         self.messages = self.messages[:-2]
 
 
-#解析响应体，更精简的写法
+# 解析响应体，更精简的写法
 # def safe_parse(line):
 #     try:
 #         return json.loads(line[6:].decode("utf-8"))
@@ -119,7 +118,7 @@ class Chat:
 # )
 
 async def init_chat(model: ModelAlias) -> Chat:
-    async with aiohttp.ClientSession() as session:
+    async with ClientSession() as session:
         async with await session.get(
             STATUS_URL, headers=STATUS_HEADERS, ssl=SSL_CONTEXT
         ) as response:
